@@ -128,13 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MyVector.cpp" />
+    <ClCompile Include="DeviceVector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
     <ClInclude Include="EnergyControlManager.h" />
     <ClInclude Include="EnergyControlModule.h" />
-    <ClInclude Include="MyVector.h" />
+    <ClInclude Include="DeviceVector.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemGroup>

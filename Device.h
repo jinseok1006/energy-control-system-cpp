@@ -6,44 +6,46 @@
 using std::string;
 
 class Device {
-  bool on;      // 难咙咯何
   const int watt; // 客飘
+  bool on;        // 难咙咯何
   static string name;
 
 protected:
-  Device(int on, int watt) : on(false), watt(watt) {}
+  Device(int on, int watt) : on(on), watt(watt) {}
 
 public:
   bool getOn() const { return on; }
   void setOn(bool value) { on = value; }
-  int getWh() const { return watt; }
+  int getWatt() const { return watt; }
   string getOnString() const { return on ? "ON" : "OFF"; }
 };
 
 class Light : public Device {
 public:
-  Light(bool on = false) : Device(on, 40) {}
+  const static int WATT = 40;
+  Light(bool on = false) : Device(on, WATT) {}
 };
 
 class AirConditioner : public Device {
 public:
-  AirConditioner(bool on = false) : Device(on, 1300) {}
+  const static int WATT = 1300;
+  AirConditioner(bool on = false) : Device(on, WATT) {}
 };
 
 class TV : public Device {
-
 public:
-  TV(bool on = false) : Device(on, 300) {}
+  const static int WATT = 300;
+  TV(bool on = false) : Device(on, WATT) {}
 };
 
 class Computer : public Device {
-
 public:
-  Computer(bool on = false) : Device(on, 80) {}
+  const static int WATT = 80;
+  Computer(bool on = false) : Device(on, WATT) {}
 };
 
 class Equipment : public Device {
-
 public:
-  Equipment(bool on = false) : Device(on, 500) {}
+  const static int WATT = 40;
+  Equipment(bool on = false) : Device(on, WATT) {}
 };

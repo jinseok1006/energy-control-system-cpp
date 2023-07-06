@@ -1,6 +1,6 @@
 #pragma once
 #include "Device.h"
-#include "MyVector.h"
+#include "DeviceVector.h"
 #include <iostream>
 #include <string>
 
@@ -9,8 +9,6 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
-
-inline bool random() { return rand() % 2; }
 
 class Room {
 public:
@@ -21,39 +19,39 @@ public:
 protected:
   string name;
   int number;
-  double currentWh;
-  MyVector<AirConditioner> aircons;
-  MyVector<Light> lights;
+  double currentWatt;
+  DeviceVector aircons;
+  DeviceVector lights;
 
-  Room(string name, int number) : name(name), number(number), currentWh(0) {}
+  Room(string name, int number) : name(name), number(number), currentWatt(0) {}
 
 public:
   void inspect() {
-    double currentWh = measureCurrentWh();
-    this->currentWh = currentWh;
+    double currentWatt = measureCurrentWh();
+    this->currentWatt = currentWatt;
   }
 
   virtual double measureCurrentWh() const {
-    double currentWh = 0;
+    double currentWatt = 0;
 
     for (const auto &light : lights) {
-      if (light.getOn()) {
-        currentWh += light.getWh();
+      if (light->getOn()) {
+        currentWatt += light->getWatt();
       }
     }
 
     for (const auto &aircon : aircons) {
-      if (aircon.getOn()) {
-        currentWh += aircon.getWh();
+      if (aircon->getOn()) {
+        currentWatt += aircon->getWatt();
       }
     }
-    return currentWh;
+    return currentWatt;
   }
 
-  double getCurrentWh() const { return currentWh; }
+  double getCurrentWh() const { return currentWatt; }
   virtual bool controlDevice(string name, int id, bool value) = 0;
   void showName() { cout << number << "호 " << name; }
-  void showCurrentWatt() { cout << "소비 전력:" << currentWh; }
+  void showCurrentWatt() { cout << "소비 전력:" << currentWatt; }
 
   virtual void showVerbose() {
     showName();
@@ -67,40 +65,29 @@ public:
 };
 
 class ComputerRoom : public Room {
-  MyVector<Computer> computers;
+  DeviceVector computers;
 
 public:
   ComputerRoom(int number) : Room("전산실", number) {
-    lights = MyVector<Light>(3, Light(), "조명");
-    computers = MyVector<Computer>(7, Computer(), "컴퓨터");
-    aircons = MyVector<AirConditioner>(2, AirConditioner(), "에어컨");
-
-    setRandom();
-  }
-
-  void setRandom() {
-    for (auto &light : lights)
-      light.setOn(random());
-    for (auto &computer : computers)
-      computer.setOn(random());
-    for (auto &aircon : aircons)
-      aircon.setOn(random());
+    lights = DeviceVector(3, new Light(), "조명");
+    computers = DeviceVector(7, new Computer(), "컴퓨터");
+    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
   }
 
   double measureCurrentWh() const override {
-    double currentWh =
+    double currentWatt =
         Room::measureCurrentWh(); // 공통 오브젝트 전력량부터 체크
 
     int num = 0;
 
     for (const auto &computer : computers) {
-      if (computer.getOn()) {
+      if (computer->getOn()) {
         num++;
-        currentWh += computer.getWh();
+        currentWatt += computer->getWatt();
       }
     }
 
-    return currentWh;
+    return currentWatt;
   }
 
   void showVerbose() override {
@@ -115,50 +102,49 @@ public:
     if (name == "조명") {
       if (id >= lights.size())
         return false;
-      lights.setOn(id, value);
+
+      lights[id]->setOn(value);
 
     } else if (name == "컴퓨터") {
       if (id >= computers.size())
         return false;
-      cout << "id 통과";
-      computers.setOn(id, value);
+
+      computers[id]->setOn(value);
     } else { // 에어컨
       if (id >= aircons.size())
         return false;
-      aircons.setOn(id, value);
+      aircons[id]->setOn(value);
     }
     return true;
   }
 };
 class LectureRoom : public Room {
-  MyVector<Computer> computers;
-  MyVector<TV> tvs;
+  DeviceVector computers;
+  DeviceVector tvs;
 
 public:
   LectureRoom(int number) : Room("강의실", number) {
-    lights = MyVector<Light>(5, Light(), "조명");
-    aircons = MyVector<AirConditioner>(2, AirConditioner(), "에어컨");
-    computers = MyVector<Computer>(1, Computer(), "컴퓨터");
-    tvs = MyVector<TV>(1, TV(), "TV");
-
-    setRandom();
+    lights = DeviceVector(5, new Light(), "조명");
+    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
+    computers = DeviceVector(1, new Computer(), "컴퓨터");
+    tvs = DeviceVector(1, new TV(), "TV");
   }
   double measureCurrentWh() const override {
-    double currentWh = Room::measureCurrentWh();
+    double currentWatt = Room::measureCurrentWh();
 
     for (const auto &computer : computers) {
-      if (computer.getOn()) {
-        currentWh += computer.getWh();
+      if (computer->getOn()) {
+        currentWatt += computer->getWatt();
       }
     }
 
     for (const auto &tv : tvs) {
-      if (tv.getOn()) {
-        currentWh += tv.getWh();
+      if (tv->getOn()) {
+        currentWatt += tv->getWatt();
       }
     }
 
-    return currentWh;
+    return currentWatt;
   }
   bool controlDevice(string name, int id, bool value) override {
     if (name != "조명" && name != "컴퓨터" && name != "에어컨" && name != "TV")
@@ -167,31 +153,21 @@ public:
     if (name == "조명") {
       if (id >= lights.size())
         return false;
-      lights.setOn(id, value);
+      lights[id]->setOn(value);
     } else if (name == "컴퓨터") {
       if (id >= computers.size())
         return false;
-      computers.setOn(id, value);
+      computers[id]->setOn(value);
     } else if (name == "TV") {
       if (id >= tvs.size())
         return false;
-      tvs.setOn(id, value);
+      tvs[id]->setOn(value);
     } else { // 에어컨
       if (id >= aircons.size())
         return false;
-      aircons.setOn(id, value);
+      aircons[id]->setOn(value);
     }
     return true;
-  }
-
-  void setRandom() {
-    for (auto &light : lights)
-      light.setOn(random());
-    for (auto &aircon : aircons)
-      aircon.setOn(random());
-
-    for (auto &tv : tvs)
-      tv.setOn(random());
   }
 
   void showVerbose() override {
@@ -202,37 +178,27 @@ public:
 };
 //
 class Laboratory : public Room {
-  MyVector<Equipment> equipments;
+  DeviceVector equipments;
 
 public:
   Laboratory(int number) : Room("연구실", number) {
-    lights = MyVector<Light>(3, Light(), "조명");
-    aircons = MyVector<AirConditioner>(2, AirConditioner(), "에어컨");
-    equipments = MyVector<Equipment>(1, Equipment(), "실험장비");
-    setRandom();
-  }
-
-  void setRandom() {
-    for (auto &light : lights)
-      light.setOn(random());
-    for (auto &aircon : aircons)
-      aircon.setOn(random());
-    for (auto &aircon : aircons)
-      aircon.setOn(random());
+    lights = DeviceVector(3, new Light(), "조명");
+    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
+    equipments = DeviceVector(1, new Equipment(), "실험장비");
   }
 
   double measureCurrentWh() const override {
-    double currentWh = Room::measureCurrentWh();
+    double currentWatt = Room::measureCurrentWh();
 
     int num = 0;
     for (const auto &equipments : equipments) {
-      if (equipments.getOn()) {
+      if (equipments->getOn()) {
         num++;
-        currentWh += equipments.getWh();
+        currentWatt += equipments->getWatt();
       }
     }
 
-    return currentWh;
+    return currentWatt;
   }
 
   bool controlDevice(string name, int id, bool value) override {
@@ -242,15 +208,15 @@ public:
     if (name == "조명") {
       if (id >= lights.size())
         return false;
-      lights.setOn(id, value);
+      lights[id]->setOn(value);
     } else if (name == "실험장비") {
       if (id >= equipments.size())
         return false;
-      equipments.setOn(id, value);
+      equipments[id]->setOn(value);
     } else { // 에어컨
       if (id >= aircons.size())
         return false;
-      aircons.setOn(id, value);
+      aircons[id]->setOn(value);
     }
     return true;
   }

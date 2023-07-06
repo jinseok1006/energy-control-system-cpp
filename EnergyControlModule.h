@@ -65,7 +65,7 @@ public:
       cout << endl;
 
       for (int col = 0; col < 4; col++) {
-        rooms[row * 4 + col]->showCurrentWh();
+        rooms[row * 4 + col]->showCurrentWatt();
         cout << '\t';
       }
       cout << "\n\n";

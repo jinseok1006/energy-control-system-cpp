@@ -44,7 +44,7 @@ public:
       if (id < 1)
         continue;
 
-      bool res = room->controlEnergyObject(name, id - 1, value);
+      bool res = room->controlDevice(name, id - 1, value);
 
       if (res) {
         system("cls");
