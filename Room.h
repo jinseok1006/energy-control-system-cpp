@@ -1,6 +1,7 @@
 #pragma once
 #include "Device.h"
 #include "DeviceVector.h"
+#include "Devices.h"
 #include <iostream>
 #include <string>
 
@@ -18,211 +19,61 @@ public:
 
 protected:
   string name;
-  int number;
+  int roomNumber;
   double currentWatt;
-  DeviceVector aircons;
-  DeviceVector lights;
+  Devices devices;
 
-  Room(string name, int number) : name(name), number(number), currentWatt(0) {}
+  Room(string name, int roomNumber) : name(name), roomNumber(roomNumber), currentWatt(0) {}
 
 public:
   void inspect() {
-    double currentWatt = measureCurrentWh();
+    double currentWatt = devices.getConsumption();
     this->currentWatt = currentWatt;
   }
 
-  virtual double measureCurrentWh() const {
-    double currentWatt = 0;
+  double getCurrentWatt() const { return currentWatt; }
+  // 이름을 DeviceVector와 매칭해야함
 
-    for (const auto &light : lights) {
-      if (light->getOn()) {
-        currentWatt += light->getWatt();
-      }
+  bool setDeviceOnOff(string name, int id, bool value) {
+    if (!devices.isDeviceExist(name, id)) {
+      //cout << name << id << "없음" << endl;
+      // 예외처리
+      return false;
     }
 
-    for (const auto &aircon : aircons) {
-      if (aircon->getOn()) {
-        currentWatt += aircon->getWatt();
-      }
-    }
-    return currentWatt;
+    devices.setDeviceOnOff(name, id, value);
+    return true;
   }
-
-  double getCurrentWh() const { return currentWatt; }
-  virtual bool controlDevice(string name, int id, bool value) = 0;
-  void showName() { cout << number << "호 " << name; }
+  void showName() { cout << roomNumber << "호 " << name; }
   void showCurrentWatt() { cout << "소비 전력:" << currentWatt; }
 
-  virtual void showVerbose() {
+  void showVerbose() {
     showName();
     cout << "\n";
     showCurrentWatt();
     cout << "\n\n";
 
-    lights.show();
-    aircons.show();
+    devices.show();
   }
 };
 
 class ComputerRoom : public Room {
-  DeviceVector computers;
-
 public:
-  ComputerRoom(int number) : Room("전산실", number) {
-    lights = DeviceVector(3, new Light(), "조명");
-    computers = DeviceVector(7, new Computer(), "컴퓨터");
-    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
-  }
-
-  double measureCurrentWh() const override {
-    double currentWatt =
-        Room::measureCurrentWh(); // 공통 오브젝트 전력량부터 체크
-
-    int num = 0;
-
-    for (const auto &computer : computers) {
-      if (computer->getOn()) {
-        num++;
-        currentWatt += computer->getWatt();
-      }
-    }
-
-    return currentWatt;
-  }
-
-  void showVerbose() override {
-    Room::showVerbose();
-    computers.show();
-  }
-
-  bool controlDevice(string name, int id, bool value) override {
-    if (name != "조명" && name != "컴퓨터" && name != "에어컨")
-      return false;
-
-    if (name == "조명") {
-      if (id >= lights.size())
-        return false;
-
-      lights[id]->setOn(value);
-
-    } else if (name == "컴퓨터") {
-      if (id >= computers.size())
-        return false;
-
-      computers[id]->setOn(value);
-    } else { // 에어컨
-      if (id >= aircons.size())
-        return false;
-      aircons[id]->setOn(value);
-    }
-    return true;
+  ComputerRoom(int roomNumber) : Room("전산실", roomNumber) {
+    devices = Devices(3, 2, 7, 0, 0);
   }
 };
+
 class LectureRoom : public Room {
-  DeviceVector computers;
-  DeviceVector tvs;
-
 public:
-  LectureRoom(int number) : Room("강의실", number) {
-    lights = DeviceVector(5, new Light(), "조명");
-    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
-    computers = DeviceVector(1, new Computer(), "컴퓨터");
-    tvs = DeviceVector(1, new TV(), "TV");
-  }
-  double measureCurrentWh() const override {
-    double currentWatt = Room::measureCurrentWh();
-
-    for (const auto &computer : computers) {
-      if (computer->getOn()) {
-        currentWatt += computer->getWatt();
-      }
-    }
-
-    for (const auto &tv : tvs) {
-      if (tv->getOn()) {
-        currentWatt += tv->getWatt();
-      }
-    }
-
-    return currentWatt;
-  }
-  bool controlDevice(string name, int id, bool value) override {
-    if (name != "조명" && name != "컴퓨터" && name != "에어컨" && name != "TV")
-      return false;
-
-    if (name == "조명") {
-      if (id >= lights.size())
-        return false;
-      lights[id]->setOn(value);
-    } else if (name == "컴퓨터") {
-      if (id >= computers.size())
-        return false;
-      computers[id]->setOn(value);
-    } else if (name == "TV") {
-      if (id >= tvs.size())
-        return false;
-      tvs[id]->setOn(value);
-    } else { // 에어컨
-      if (id >= aircons.size())
-        return false;
-      aircons[id]->setOn(value);
-    }
-    return true;
-  }
-
-  void showVerbose() override {
-    Room::showVerbose();
-    tvs.show();
-    computers.show();
+  LectureRoom(int roomNumber) : Room("강의실", roomNumber) {
+    devices = Devices(5, 2, 1, 1, 0);
   }
 };
-//
+
 class Laboratory : public Room {
-  DeviceVector equipments;
-
 public:
-  Laboratory(int number) : Room("연구실", number) {
-    lights = DeviceVector(3, new Light(), "조명");
-    aircons = DeviceVector(2, new AirConditioner(), "에어컨");
-    equipments = DeviceVector(1, new Equipment(), "실험장비");
-  }
-
-  double measureCurrentWh() const override {
-    double currentWatt = Room::measureCurrentWh();
-
-    int num = 0;
-    for (const auto &equipments : equipments) {
-      if (equipments->getOn()) {
-        num++;
-        currentWatt += equipments->getWatt();
-      }
-    }
-
-    return currentWatt;
-  }
-
-  bool controlDevice(string name, int id, bool value) override {
-    if (name != "조명" && name != "에어컨" && name != "실험장비")
-      return false;
-
-    if (name == "조명") {
-      if (id >= lights.size())
-        return false;
-      lights[id]->setOn(value);
-    } else if (name == "실험장비") {
-      if (id >= equipments.size())
-        return false;
-      equipments[id]->setOn(value);
-    } else { // 에어컨
-      if (id >= aircons.size())
-        return false;
-      aircons[id]->setOn(value);
-    }
-    return true;
-  }
-
-  void showVerbose() override {
-    Room::showVerbose();
-    equipments.show();
+  Laboratory(int roomNumber) : Room("연구실", roomNumber) {
+    devices = Devices(3, 2, 0, 0, 1);
   }
 };

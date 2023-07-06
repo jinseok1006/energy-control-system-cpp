@@ -1,10 +1,12 @@
 #pragma once
 #include "Device.h"
+#include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
 using std::cout;
 using std::endl;
+using std::function;
 using std::string;
 using std::vector;
 
@@ -15,8 +17,13 @@ class DeviceVector : public vector<Device *> {
 
 public:
   DeviceVector() : vector<Device *>() {}
-  DeviceVector(int n, Device *object, string name)
-      : vector<Device *>(n, object), name(name) {
+  DeviceVector(int size, function<Device *()> newDevice, string name)
+      : vector<Device *>(size, nullptr), name(name) {
+
+    for (auto &device : *this) {
+      device = newDevice();
+    }
+
     setRandom(); // 각 디바이스의 꺼짐/켜짐 상태를 랜덤으로 결정
   }
   void show() const {
@@ -32,7 +39,12 @@ public:
 
   void setRandom() {
     for (auto &device : *this) {
-      device->setOn(random());
+      device->setOnOff(random());
     }
   }
+
+  string getName() const { return name; }
 };
+
+// 단순히 배열대신 클래스를 이용하여 하나의 객체로 묶음.
+// 배열을 대체하므로 외부에서 직접접근이 가능해야함

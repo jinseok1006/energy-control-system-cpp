@@ -33,4 +33,5 @@ int main() {
   srand((unsigned)time(0));
   EnergyControlManager manager;
   manager.run();
+
 }

@@ -7,45 +7,45 @@ using std::string;
 
 class Device {
   const int watt; // 客飘
-  bool on;        // 难咙咯何
+  bool state;     // 难咙咯何
   static string name;
 
 protected:
-  Device(int on, int watt) : on(on), watt(watt) {}
+  Device(int state, int watt) : state(state), watt(watt) {}
 
 public:
-  bool getOn() const { return on; }
-  void setOn(bool value) { on = value; }
+  bool getOnOff() const { return state; }
+  void setOnOff(bool value) { state = value; }
   int getWatt() const { return watt; }
-  string getOnString() const { return on ? "ON" : "OFF"; }
+  string getOnString() const { return state ? "ON" : "OFF"; }
 };
 
 class Light : public Device {
 public:
   const static int WATT = 40;
-  Light(bool on = false) : Device(on, WATT) {}
+  Light(bool state = false) : Device(state, WATT) {}
 };
 
 class AirConditioner : public Device {
 public:
   const static int WATT = 1300;
-  AirConditioner(bool on = false) : Device(on, WATT) {}
+  AirConditioner(bool state = false) : Device(state, WATT) {}
 };
 
 class TV : public Device {
 public:
   const static int WATT = 300;
-  TV(bool on = false) : Device(on, WATT) {}
+  TV(bool state = false) : Device(state, WATT) {}
 };
 
 class Computer : public Device {
 public:
   const static int WATT = 80;
-  Computer(bool on = false) : Device(on, WATT) {}
+  Computer(bool state = false) : Device(state, WATT) {}
 };
 
 class Equipment : public Device {
 public:
   const static int WATT = 40;
-  Equipment(bool on = false) : Device(on, WATT) {}
+  Equipment(bool state = false) : Device(state, WATT) {}
 };

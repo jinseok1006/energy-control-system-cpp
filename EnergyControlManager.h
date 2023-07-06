@@ -21,7 +21,7 @@ public:
     enterRoom();
   }
 
-  void controlDevice(int roomNumber) {
+  void setDeviceOnOff(int roomNumber) {
     Room *room = module.getRoom(roomNumber);
     string name;
     int id;
@@ -44,7 +44,7 @@ public:
       if (id < 1)
         continue;
 
-      bool res = room->controlDevice(name, id - 1, value);
+      bool res = room->setDeviceOnOff(name, id - 1, value);
 
       if (res) {
         system("cls");
@@ -73,7 +73,7 @@ public:
         continue;
       }
 
-      controlDevice(roomNumber);
+      setDeviceOnOff(roomNumber);
     }
   }
 };

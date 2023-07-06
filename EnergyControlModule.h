@@ -47,7 +47,7 @@ public:
 
     for (auto &room : rooms) {
       room->inspect();
-      totalWatt += room->getCurrentWh();
+      totalWatt += room->getCurrentWatt();
     }
 
     this->totalWatt = totalWatt;
@@ -72,5 +72,5 @@ public:
     }
   }
 
-  Room *getRoom(int number) { return rooms.at(number - 101); }
+  Room *getRoom(int roomNumber) { return rooms.at(roomNumber - 101); }
 };
