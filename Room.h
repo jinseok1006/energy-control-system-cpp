@@ -1,33 +1,14 @@
 #pragma once
-#include "EnergyObject.h"
+#include "Device.h"
+#include "MyVector.h"
 #include <iostream>
 #include <string>
-#include <vector>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
-
-template <typename T> class MyVector : public vector<T> {
-  string name;
-
-public:
-  MyVector() : vector<T>() {}
-  MyVector(int n, T object, string name) : vector<T>(n, object), name(name) {}
-  void show() const {
-    for (int i = 0; i < this->size(); i++)
-      cout << name << (i + 1) << "\t";
-
-    cout << '\n';
-
-    for (int i = 0; i < this->size(); i++)
-      cout << (*this)[i].getOnString() << "\t";
-    cout << "\n\n";
-  }
-  void setOn(int id, bool value) { (*this)[id].setOn(value); }
-};
 
 inline bool random() { return rand() % 2; }
 
@@ -70,11 +51,9 @@ public:
   }
 
   double getCurrentWh() const { return currentWh; }
-
   virtual bool controlEnergyObject(string name, int id, bool value) = 0;
-
   void showName() { cout << number << "호 " << name; }
-  void showCurrentWh() { cout << "전력사용량:" << currentWh; }
+  void showCurrentWh() { cout << "소비 전력:" << currentWh; }
 
   virtual void showVerbose() {
     showName();
@@ -232,6 +211,7 @@ public:
     lights = MyVector<Light>(3, Light(), "조명");
     aircons = MyVector<AirConditioner>(2, AirConditioner(), "에어컨");
     equipments = MyVector<Equipment>(1, Equipment(), "실험장비");
+    setRandom();
   }
 
   void setRandom() {

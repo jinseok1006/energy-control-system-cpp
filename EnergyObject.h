@@ -7,7 +7,7 @@ using std::string;
 
 class Device {
   bool on;      // 켜짐여부
-  const int watt; // 와트
+  const int watt; // 와트시
   static string name;
 
 protected:
@@ -22,28 +22,28 @@ public:
 
 class Light : public Device {
 public:
-  Light(bool on = false) : Device(on, 40) {}
+  Light(bool on = false) : Device(on, 5) {}
 };
 
 class AirConditioner : public Device {
 public:
-  AirConditioner(bool on = false) : Device(on, 1300) {}
+  AirConditioner(bool on = false) : Device(on, 15) {}
 };
 
 class TV : public Device {
 
 public:
-  TV(bool on = false) : Device(on, 300) {}
+  TV(bool on = false) : Device(on, 10) {}
 };
 
 class Computer : public Device {
 
 public:
-  Computer(bool on = false) : Device(on, 80) {}
+  Computer(bool on = false) : Device(on, 10) {}
 };
 
 class Equipment : public Device {
 
 public:
-  Equipment(bool on = false) : Device(on, 500) {}
+  Equipment(bool on = false) : Device(on, 25) {}
 };

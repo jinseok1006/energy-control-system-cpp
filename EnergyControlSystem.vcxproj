@@ -128,10 +128,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyVector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnergyObject.h" />
+    <ClInclude Include="Device.h" />
+    <ClInclude Include="MyVector.h" />
     <ClInclude Include="Room.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

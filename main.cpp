@@ -1,5 +1,5 @@
 
-#include "EnergyObject.h"
+#include "Device.h"
 #include "Room.h"
 #include <iostream>
 #include <string>
@@ -23,7 +23,7 @@ using std::vector;
 
 class EnergyControlModule {
   double totalUsage;
-  double totalWh;
+  double totalWatt;
   double billingCharge;
 
   vector<Room *> rooms;
@@ -31,7 +31,7 @@ class EnergyControlModule {
 public:
   EnergyControlModule() {
     totalUsage = 0;
-    totalWh = 0;
+    totalWatt = 0;
     billingCharge = 0;
 
     for (int i = 0; i < 16; i++) {
@@ -55,20 +55,20 @@ public:
   }
 
   void inspect() {
-    int totalWh = 0;
+    int totalWatt = 0;
     int i = 0;
 
     for (auto &room : rooms) {
       room->inspect();
-      totalWh += room->getCurrentWh();
+      totalWatt += room->getCurrentWh();
     }
 
-    this->totalWh = totalWh;
+    this->totalWatt = totalWatt;
   }
 
   void show() {
     cout << "전북대학교 공과대학 건물 전력 관리 시스템" << endl;
-    cout << "총 전력 사용량: " << totalWh << "Wh" << endl << endl;
+    cout << "총 소비 전력: " << totalWatt << "W" << endl << endl;
 
     for (int row = 0; row < 4; row++) {
       for (int col = 0; col < 4; col++) {
@@ -100,18 +100,17 @@ public:
 
   void run() {
     while (true) {
-
       module.inspect();
-
-      bool exit = enter();
+      
+      bool exit = enterRoom();
       if (exit)
         break;
 
-      control();
+      controlDevice();
     }
   }
 
-  void control() {
+  void controlDevice() {
     string name;
     int id;
     bool value;
@@ -143,7 +142,7 @@ public:
     }
   }
 
-  bool enter() {
+  bool enterRoom() {
     int number;
     system("cls");
     module.show();
