@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include<string>
+#include"Device.h"
 using std::cout;
 using std::endl;
 using std::vector;

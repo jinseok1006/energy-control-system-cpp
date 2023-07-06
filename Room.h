@@ -51,14 +51,14 @@ public:
   }
 
   double getCurrentWh() const { return currentWh; }
-  virtual bool controlEnergyObject(string name, int id, bool value) = 0;
+  virtual bool controlDevice(string name, int id, bool value) = 0;
   void showName() { cout << number << "호 " << name; }
-  void showCurrentWh() { cout << "소비 전력:" << currentWh; }
+  void showCurrentWatt() { cout << "소비 전력:" << currentWh; }
 
   virtual void showVerbose() {
     showName();
     cout << "\n";
-    showCurrentWh();
+    showCurrentWatt();
     cout << "\n\n";
 
     lights.show();
@@ -66,8 +66,6 @@ public:
   }
 };
 
-//=========================================
-// 호실을 상속하는 각 전산실, 강의실, 실습실, 사무실 등
 class ComputerRoom : public Room {
   MyVector<Computer> computers;
 
@@ -110,7 +108,7 @@ public:
     computers.show();
   }
 
-  bool controlEnergyObject(string name, int id, bool value) override {
+  bool controlDevice(string name, int id, bool value) override {
     if (name != "조명" && name != "컴퓨터" && name != "에어컨")
       return false;
 
@@ -162,7 +160,7 @@ public:
 
     return currentWh;
   }
-  bool controlEnergyObject(string name, int id, bool value) override {
+  bool controlDevice(string name, int id, bool value) override {
     if (name != "조명" && name != "컴퓨터" && name != "에어컨" && name != "TV")
       return false;
 
@@ -237,7 +235,7 @@ public:
     return currentWh;
   }
 
-  bool controlEnergyObject(string name, int id, bool value) override {
+  bool controlDevice(string name, int id, bool value) override {
     if (name != "조명" && name != "에어컨" && name != "실험장비")
       return false;
 

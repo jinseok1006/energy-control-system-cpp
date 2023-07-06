@@ -132,6 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
+    <ClInclude Include="EnergyControlManager.h" />
+    <ClInclude Include="EnergyControlModule.h" />
     <ClInclude Include="MyVector.h" />
     <ClInclude Include="Room.h" />
   </ItemGroup>

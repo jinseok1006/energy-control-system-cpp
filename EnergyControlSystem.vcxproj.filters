@@ -32,6 +32,12 @@
     <ClInclude Include="MyVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EnergyControlManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyControlModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
