@@ -127,8 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Devices.cpp" />
+    <ClCompile Include="EnergyControlManager.cpp" />
+    <ClCompile Include="EnergyControlModule.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DeviceVector.cpp" />
+    <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
