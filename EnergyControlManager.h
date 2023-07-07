@@ -16,11 +16,6 @@ class EnergyControlManager {
 public:
   EnergyControlManager() = default;
 
-  void run() {
-    module.inspect();
-    enterRoom();
-  }
-
   void setDeviceOnOff(int roomNumber) {
     Room *room = module.getRoom(roomNumber);
     string name;
@@ -41,21 +36,83 @@ public:
       cin.clear();
       cin.ignore(100, '\n');
 
-      if (id < 1)
-        continue;
-
       bool res = room->setDeviceOnOff(name, id - 1, value);
 
       if (res) {
         system("cls");
         room->inspect();
         room->showVerbose();
+      } else {
+        cout << "입력이 잘못되었습니다." << endl;
       }
     }
   }
 
-  void enterRoom() {
+  void addDevice(int roomNumber) {
+    Room *room = module.getRoom(roomNumber);
+    string name;
+
+    system("cls");
+    room->showVerbose();
+
+    while (true) {
+      cout << "추가하기 원하는 장비(조명,에어컨,TV, 컴퓨터,실험장비)의 이름을 "
+              "입력하세요('q'로 나가기)>>";
+      getline(cin, name);
+
+      if (name == "q")
+        break;
+
+      bool res = room->addDevice(name);
+
+      if (res) {
+        system("cls");
+        room->inspect();
+        room->showVerbose();
+      } else {
+        cout << "입력이 잘못되었습니다." << endl;
+      }
+    }
+  }
+
+  void inRoom(int roomNumber) {
+    int input;
+    Room *room = module.getRoom(roomNumber);
+    system("cls");
+    room->inspect();
+    room->showVerbose();
+
+    while (true) {
+      cout << "1. 기기 추가하기 2. 기기 상태변경(-1로 나가기)>>";
+      cin >> input;
+      cin.ignore();
+
+      switch (input) {
+      case 1:
+        addDevice(roomNumber);
+        system("cls");
+        room->showVerbose();
+        break;
+      case 2:
+        setDeviceOnOff(roomNumber);
+        system("cls");
+        room->showVerbose();
+        break;
+      case -1:
+        return;
+      default:
+        cout << "입력이 잘못되었습니다." << endl;
+        cin.clear();
+        cin.ignore(100, '\n');
+        break;
+      }
+    }
+  }
+
+  void run() {
     int roomNumber;
+
+    module.inspect();
     while (true) {
       if (!cin.fail()) {
         system("cls");
@@ -63,6 +120,7 @@ public:
       }
       cout << "이동하고싶은 호실 번호를 입력하세요('-1'로 종료하기)>>";
       cin >> roomNumber;
+      cin.ignore();
 
       if (roomNumber == -1)
         return;
@@ -73,7 +131,7 @@ public:
         continue;
       }
 
-      setDeviceOnOff(roomNumber);
+      inRoom(roomNumber);
     }
   }
 };

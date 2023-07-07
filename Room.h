@@ -35,6 +35,8 @@ public:
   // 이름을 DeviceVector와 매칭해야함
 
   bool setDeviceOnOff(string name, int id, bool value) {
+    if(id<0) return false;
+
     if (!devices.isDeviceExist(name, id)) {
       //cout << name << id << "없음" << endl;
       // 예외처리
@@ -54,6 +56,9 @@ public:
     cout << "\n\n";
 
     devices.show();
+  }
+  bool addDevice(string name) {
+    return devices.addDevice(name);
   }
 };
 

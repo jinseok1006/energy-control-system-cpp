@@ -19,7 +19,6 @@ public:
   EnergyControlModule() {
     totalUsage = 0;
     totalWatt = 0;
-    billingCharge = 0;
 
     for (int i = 0; i < 16; i++) {
       int roomType = rand() % 3;
@@ -55,7 +54,7 @@ public:
 
   void show() const {
     cout << "전북대학교 공과대학 건물 전력 관리 시스템" << endl;
-    cout << "총 소비 전력: " << totalWatt << "W" << endl << endl;
+    cout << "현재 총 소비 전력: " << totalWatt << "W" << endl << endl;
 
     for (int row = 0; row < 4; row++) {
       for (int col = 0; col < 4; col++) {

@@ -45,6 +45,3 @@ public:
 
   string getName() const { return name; }
 };
-
-// 단순히 배열대신 클래스를 이용하여 하나의 객체로 묶음.
-// 배열을 대체하므로 외부에서 직접접근이 가능해야함
