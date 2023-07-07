@@ -102,7 +102,6 @@ void EnergyControlManager::inRoom(int roomNumber) {
 
 void EnergyControlManager::run() {
   int roomNumber;
-  bool failbit = false;
   module.inspect();
   system("cls");
   module.show();

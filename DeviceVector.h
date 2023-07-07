@@ -10,7 +10,7 @@ using std::function;
 using std::string;
 using std::vector;
 
-inline bool random() { return rand() % 10 > 3; }
+inline bool random() { return rand() % 10 > 6; }
 
 class DeviceVector : public vector<Device *> {
   string name;

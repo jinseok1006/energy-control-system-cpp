@@ -6,6 +6,9 @@ using std::vector;
 Devices::Devices(int nLights, int nAirconditioners, int nComputers, int nTvs,
                  int nEquipments) {
   // chatgpt참조하여 작성
+  // stl vector 생성자로 초기화 하면 벡터 원소 모두의 주소가 같은 현상이 발생
+  // 콜백 함수를 전달하고 생성자에서 콜백함수를 호출하여 벡터에 객체주소를
+  // 넣는것으로 처리
   lights = DeviceVector(
       nLights, []() -> Device * { return new Light(); }, "조명");
   aircons = DeviceVector(
@@ -19,12 +22,12 @@ Devices::Devices(int nLights, int nAirconditioners, int nComputers, int nTvs,
       nTvs, []() -> Device * { return new TV(); }, "TV");
 }
 
-// 이름을 -> 클래스로 치환
-// 성공하면 true 반환
 bool Devices::addDevice(string name) {
   vector<DeviceVector *> devices = {&lights, &aircons, &equipments, &computers,
                                     &tvs};
+  // 성공하면 true 반환
 
+  // 이름을 -> 클래스로 치환
   Device *device;
   if (name == "조명")
     device = new Light();
@@ -39,12 +42,10 @@ bool Devices::addDevice(string name) {
   else
     return false;
 
-  // 벡터는 항상 존재하는데?
-  /*if (!isVectorExist(name))
-    return false;*/
-
   for (auto &deviceVector : devices) {
     if (deviceVector->getName() == name) {
+      if(deviceVector->size()>9) return false;
+
       deviceVector->push_back(device);
       return true;
     }
@@ -78,7 +79,7 @@ void Devices::show() {
 }
 
 bool Devices::isDeviceExist(string name,
-                            int id) { // 인터페이스에서 한번 걸러진 값
+                            int id) { // id는 인터페이스에서 한번 걸러진 값
   vector<DeviceVector *> devices = {&lights, &aircons, &equipments, &computers,
                                     &tvs};
   if (id < 0)

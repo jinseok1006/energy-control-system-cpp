@@ -2,6 +2,7 @@
 #include "EnergyControlModule.h"
 
 EnergyControlModule::EnergyControlModule() {
+  srand((unsigned)time(0));
   totalUsage = 0;
   totalWatt = 0;
 
@@ -38,7 +39,7 @@ void EnergyControlModule::inspect() {
 }
 
 void EnergyControlModule::show() const {
-  cout << "공과대학 건물 전력 관리 시스템" << endl;
+  cout << "공과대학 건물 에너지 관리 시스템" << endl;
   cout << "현재 총 소비 전력: " << totalWatt << "W" << endl << endl;
 
   for (int row = 0; row < 4; row++) {
