@@ -74,7 +74,7 @@ void EnergyControlManager::inRoom(int roomNumber) {
   room->showVerbose();
 
   while (true) {
-    cout << "1. 기기 추가하기 2. 기기 상태변경(뒤로 가려면 '-1')>>";
+    cout << "1. 기기 추가하기 2. 기기 전원관리하기(뒤로 가려면 '-1')>>";
     cin >> input;
     cin.ignore();
 

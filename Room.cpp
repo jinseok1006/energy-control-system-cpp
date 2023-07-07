@@ -15,7 +15,6 @@ bool Room::setDeviceOnOff(string name, int id, bool value) {
     //  예외처리
     return false;
   }
-
   devices.setDeviceOnOff(name, id, value);
   return true;
 }

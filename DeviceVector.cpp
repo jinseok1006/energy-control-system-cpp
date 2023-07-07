@@ -30,6 +30,6 @@ void DeviceVector::show() const {
 
 void DeviceVector::setRandom() {
   for (auto &device : *this) {
-    device->setOnOff(random());
+    device->setPower(random());
   }
 }

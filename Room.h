@@ -20,7 +20,7 @@ public:
 protected:
   string name;
   int roomNumber;
-  double currentWatt;
+  int currentWatt;
   Devices devices;
 
   Room(string name, int roomNumber)

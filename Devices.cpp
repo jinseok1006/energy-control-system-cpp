@@ -59,7 +59,7 @@ int Devices::getConsumption() {
 
   for (const auto &deviceVector : devices) {
     for (const auto &device : *deviceVector) {
-      if (device->getOnOff())
+      if (device->getPower())
         consumption += device->getWatt();
     }
   }
@@ -102,7 +102,7 @@ void Devices::setDeviceOnOff(string name, int id, bool value) {
 
   for (const auto &deviceVector : devices) {
     if (deviceVector->getName() == name) {
-      (*deviceVector)[id]->setOnOff(value);
+      (*deviceVector)[id]->setPower(value);
     }
   }
 }
